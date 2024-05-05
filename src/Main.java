@@ -1,5 +1,4 @@
 import org.apache.commons.lang3.tuple.Pair;
-import org.kohsuke.github.*;
 import org.kohsuke.github.GHCommit;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
@@ -159,6 +158,7 @@ public class Main {
 
         es.shutdown();
         boolean tasksFinished = es.awaitTermination(1, TimeUnit.MINUTES);
+        es.close();
         if(!tasksFinished) {
             System.out.println("Not all commits parsed");
             return null;
