@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+}
+
+repositories { mavenCentral() }
+dependencies {
+    // https://mvnrepository.com/artifact/org.kohsuke/github-api
+    implementation 'org.kohsuke:github-api:1.321'
+}
+
+sourceSets {
+    main.java.srcDirs 'src'
+}
+
+tasks.register('uberJar', Jar) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    archiveClassifier = 'uber'
+
+    from sourceSets.main.output
+
+    dependsOn configurations.runtimeClasspath
+    from {
+        configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
+    }
+    manifest {
+        attributes 'Main-Class': 'Main'
+    }
+}
